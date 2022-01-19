@@ -102,8 +102,13 @@ static int iptables_connection_switch_raw(int family, u32 *src_addr, u16 src_por
 	 */
 	ret = cr_system(-1, -1, -1, "sh", argv, 0);
 	if (ret < 0 || !WIFEXITED(ret) || WEXITSTATUS(ret)) {
+// wangzhe: We reboot the pod before restoring, so missing iptable is acceptable
+#if false
 		pr_err("Iptables configuration failed\n");
 		return -1;
+#else
+		pr_debug("Iptables configuration failed\n");
+#endif
 	}
 
 	pr_info("%s %s:%d - %s:%d connection\n", lock ? "Locked" : "Unlocked", sip, (int)src_port, dip, (int)dst_port);

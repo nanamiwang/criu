@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mycriu-deployment
+  namespace: kube-system
+  labels:
+    app: my_criu_app
+spec:
+  selector:
+    matchLabels:
+      app: my_criu_app
+  template:
+    metadata:
+      labels:
+        app: my_criu_app
+    spec:
+      containers:
+      - name: criu
+        image: criu:latest
+        imagePullPolicy: Never
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 3880
+      hostNetwork: true
